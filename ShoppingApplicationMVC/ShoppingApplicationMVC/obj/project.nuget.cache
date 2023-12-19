@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "HNS6Qskoy5mWkBtYKr702Rbaoc+pnxdODpCVk7qt8FW3r4xbnUP72ApNcI5chSN6lzqwhh9oFoUnsKUadCJpfw==",
+  "success": true,
+  "projectFilePath": "C:\\GitExample\\Amrutha\\ShoppingApplicationMVC\\ShoppingApplicationMVC\\ShoppingApplicationMVC.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\asimhadri\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

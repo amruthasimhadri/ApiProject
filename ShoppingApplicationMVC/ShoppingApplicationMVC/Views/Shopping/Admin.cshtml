@@ -1,0 +1,174 @@
+﻿@{
+    var alertMessage = ViewBag.SuccessMessage as string;
+}
+@model IEnumerable<ShoppingApplicationMVC.Models.AdminModel>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Requests</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+       
+        h2 {
+            margin: 0;
+        }
+
+       
+       
+
+        
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #e0e0e0;
+        }
+
+        .approve-button,
+        .reject-button {
+            display: inline-block;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            font-size: 14px;
+            margin-right: 5px;
+        }
+
+        .approve-button {
+            background-color: #4caf50;
+            color: #fff;
+        }
+
+            .approve-button:hover {
+                background-color: #45a049;
+            }
+
+        .reject-button {
+            background-color: darkred;
+            color: #fff;
+        }
+
+            .reject-button:hover {
+                background-color: darkred;
+            }
+    </style>
+</head>
+<body>
+  
+    
+    @*@using (Html.BeginForm("User", "Shopping", FormMethod.Post))
+    {
+        <h3 style="display: inline-block;">Inventory Requests</h3>
+        <div style="display: inline-block; margin-left: 10px;">
+            @Html.DropDownList("SelectedId", ViewBag.DropDownValues as List<SelectListItem>, "Select an item", new { @class = "form-control" })
+            @Html.Hidden("SelectedValue") <!-- Hidden field to store the selected ID -->
+            <input type="submit" value="Go" class="btn btn-primary" />
+        </div>
+    }*@
+    @using (Html.BeginForm("Admin", "Shopping", FormMethod.Post, new { id = "filterForm" }))
+    {
+        <h3 style="display: inline-block;">Inventory Requests</h3>
+        <div style="display: inline-block; margin-left: 10px;">
+            @Html.DropDownList("SelectedId", ViewBag.DropDownValues as List<SelectListItem>, "Filter By Category", new { @class = "form-control", onchange = "submitForm();" })
+        </div>
+        @Html.Hidden("SelectedValue") <!-- Hidden field to store the selected ID -->
+    }
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info" role="alert">
+            <strong>No Requests Found</strong>
+        </div>
+    }
+    else
+    {
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    @*<th>@Html.DisplayNameFor(model => model.Name)</th>
+                    <th>@Html.DisplayNameFor(model => model.CategoryName)</th>
+                    <th>@Html.DisplayNameFor(model => model.Description)</th>
+                    <th>@Html.DisplayNameFor(model => model.Price)</th>
+                    <th>@Html.DisplayNameFor(model => model.ImageData)</th>*@
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Image</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.CategoryName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                        <td><img src="data:image/jpeg;base64,@Convert.ToBase64String(item.ImageData)" alt="Product Image" style="max-width: 100px; max-height: 100px;" /></td>
+                        <td>
+                            
+                            <form action="/Shopping/Approve" method="post">
+                               
+                                <input type="hidden" name="Id" value="@item.Id">
+                                <button class="approve-button" type="submit">Approve</button>
+                            </form>
+
+
+                           
+                        </td>
+                        <td>
+                            <form>
+                                <button class="reject-button" type="submit" onclick="showReasonPopup('@item.Id')">Reject</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    }
+    <script>
+        function submitForm() {
+            document.getElementById("filterForm").submit();
+        }
+    </script>
+    @if (!string.IsNullOrEmpty(alertMessage))
+    {
+        <script>
+            
+            alert('@alertMessage');
+        </script>
+    }
+    
+</body>
+</html>
+
+

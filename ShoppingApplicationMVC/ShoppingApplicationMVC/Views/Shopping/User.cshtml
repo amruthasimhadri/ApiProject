@@ -1,0 +1,77 @@
+﻿
+@model IEnumerable<AdminModel>
+
+@using (Html.BeginForm("User", "Shopping", FormMethod.Post, new { id = "filterForm" }))
+{
+    <h3 style="display: inline-block;">Products</h3>
+    <div style="display: inline-block; margin-left: 10px;">
+        @Html.DropDownList("SelectedId", ViewBag.DropDownValues as List<SelectListItem>, "Shop By Category", new { @class = "form-control", onchange = "submitForm();" })
+    </div>
+    @Html.Hidden("SelectedValue") <!-- Hidden field to store the selected ID -->
+}
+<br />
+<br />
+<div class="row">
+    @if (Model != null && Model.Any())
+    {
+        @foreach (var item in Model)
+        {
+            <div class="col-md-3 mb-4">
+                <div class="card">
+                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(item.ImageData)" class="card-img-top" alt="Product Image">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Name</h5>
+                        <p class="card-text" style="display: none;">@item.Description</p>
+                        <p class="card-text">Price: $@item.Price</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="#" class="btn btn-primary" onclick="openProductModal('@item.Id')">View Details</a>
+                            <button class="btn btn-success" onclick="addToCart(@item.Id)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal for product details -->
+            <div class="modal" id="productModal_@item.Id" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="productModalLabel">@item.Name</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(item.ImageData)" class="img-fluid" alt="Product Image">
+                            <p>Price: $@item.Price</p>
+                            <p>@item.Description</p>
+                            <button class="btn btn-success" onclick="addToCart(@item.Id)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p>No items found.</p>
+    }
+</div>
+
+
+
+<script>
+    function submitForm() {
+        document.getElementById("filterForm").submit();
+    }
+
+    function addToCart(productId) {
+        // Implement logic to add the product with productId to the shopping cart
+        alert("Product added to cart! ProductId: " + productId);
+    }
+
+    function openProductModal(productId) {
+        $('#productModal_' + productId).modal('show');
+    }
+</script>
+
